@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2013 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="ble_not_supported">BLE is not supported</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">Searching for One Top Devices</string>
+    <string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+    <string name="error_location_perms_needed">Must have location permissions for BT LE scans to work.</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">Connect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_scan">Scan</string>
+    <string name="menu_stop">Stop</string>
+    <string name="title_activity_one_top_control">OneTopControlActivity</string>
+    <string name="power_output_text">Power Output</string>
+    <string name="temp_header_text">Surface Temperature:</string>
+    <string name="contents_temp_header_text">Probe Temperature:</string>
+    <string name="NA_text">N/A</string>
+    <string name="Celsium_text">°C</string>
+    <string name="Fahrenheit_text">°F</string>
+    <string name="Watts_text">Watts</string>
+    <string name="Set_Temp_Button_Text">Set Temp</string>
+    <string name="Target_Temp_Label">Target Temperature:</string>
+    <string name="set_temp_dialog_title">Enter desired temperature</string>
+    <string name="turn_on_device_dialog_title">Turn on the One Top</string>
+    <string name="turn_on_device_dialog_message">Please press the Power button on your One Top to start cooking</string>
+    <string name="status_poweroff">Powered off, press power button on the One Top to start cooking</string>
+    <string name="status_heating">Heating</string>
+    <string name="status_done_heating">Temperature reached</string>
+    <string name="status_cooking_timer">Cooking, timer on</string>
+    <string name="status_done_cooking">Done cooking, keeping temperature, remove food</string>
+    <string name="status_unknown">Unknown status</string>
+    <string name="status_disconnected">Connection to One Top lost, reconnecting…</string>
+    <string name="status_reconnected">Reconnected to One Top, updating values…</string>
+    <string name="temp_celsius_requested">pref_celsius_requested</string>
+    <string name="saved_last_device_address">pref_last_device_address</string>
+    <string name="Timer_Label">Enter cooking time (Hours:Minutes):</string>
+    <string name="sousvide_button_text">Set SousVide Mode</string>
+    <string name="sousvide_button_cancel_text">Stop SousVide mode</string>
+    <string name="add_food_dialog_title">Add Food</string>
+    <string name="add_food_dialog_message">Preheating is ready, now add food</string>
+    <string name="Timer_Is_Up">Timer reached</string>
+    <string name="empty_timer">00:00</string>
+    <string name="status_initializing">Initializing connection...</string>
+    <string name="status_errordevice">Unsupported Device</string>
+</resources>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.linuxhacker.android.onetopcontrol.OneTopControlActivity">
+
+    <TextView
+        android:id="@+id/power_header_text"
+        android:layout_width="75dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/power_output_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/power_control_bar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="344dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:max="10"
+        android:progress="1"
+        android:thumb="@android:drawable/ic_notification_overlay"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/power_header_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/PowerIcon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onTogglePowerOff"
+        android:src="@android:drawable/star_off"
+        app:layout_constraintStart_toEndOf="@+id/power_control_bar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/base_temp_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/temp_header_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/power_output_value" />
+
+    <TextView
+        android:id="@+id/contents_temp_header_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/contents_temp_header_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/sousvide_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/base_temp_header_text" />
+
+    <TextView
+        android:id="@+id/base_temp_out_text"
+        android:layout_width="90dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/NA_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toEndOf="@+id/base_temp_header_text"
+        app:layout_constraintTop_toTopOf="@+id/base_temp_header_text" />
+
+    <TextView
+        android:id="@+id/contents_temp_out_text"
+        android:layout_width="90dp"
+        android:layout_height="41dp"
+        android:text="@string/NA_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toStartOf="@+id/base_temp_out_text"
+        app:layout_constraintTop_toTopOf="@+id/contents_temp_header_text" />
+
+    <ToggleButton
+        android:id="@+id/switch_degrees1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:onClick="onToggleTempClicked"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textOff="@string/Fahrenheit_text"
+        android:textOn="@string/Celsium_text"
+        app:layout_constraintStart_toEndOf="@+id/base_temp_out_text"
+        app:layout_constraintTop_toTopOf="@+id/base_temp_header_text" />
+
+    <ToggleButton
+        android:id="@+id/switch_degrees2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:onClick="onToggleTempClicked"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textOff="@string/Fahrenheit_text"
+        android:textOn="@string/Celsium_text"
+        app:layout_constraintStart_toEndOf="@+id/contents_temp_out_text"
+        app:layout_constraintTop_toTopOf="@+id/contents_temp_header_text" />
+
+    <TextView
+        android:id="@+id/power_output_value"
+        android:layout_width="90dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="8dp"
+        android:gravity="right"
+        android:text="@string/NA_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="@+id/power_control_bar"
+        app:layout_constraintTop_toBottomOf="@+id/power_control_bar" />
+
+    <TextView
+        android:id="@+id/watts_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/Watts_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toEndOf="@+id/power_output_value"
+        app:layout_constraintTop_toBottomOf="@+id/power_control_bar" />
+
+    <ImageView
+        android:id="@+id/connection_state"
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@android:drawable/presence_offline"
+        android:onClick="onToggleConnect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/set_base_temp_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/Set_Temp_Button_Text"
+        android:onClick="onSetTempClicked"
+        app:layout_constraintStart_toEndOf="@+id/switch_degrees1"
+        app:layout_constraintTop_toTopOf="@+id/base_temp_header_text" />
+
+    <Button
+        android:id="@+id/set_contents_temp_button"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:onClick="onSetTempClicked"
+        android:text="@string/Set_Temp_Button_Text"
+        app:layout_constraintStart_toEndOf="@+id/switch_degrees2"
+        app:layout_constraintTop_toTopOf="@+id/contents_temp_header_text" />
+
+    <TextView
+        android:id="@+id/target_temp_label"
+        android:layout_width="118dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/Target_Temp_Label"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/watts_text"
+        app:layout_constraintTop_toBottomOf="@+id/power_control_bar" />
+
+    <TextView
+        android:id="@+id/target_temp"
+        android:layout_width="78dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/NA_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/target_temp_label"
+        app:layout_constraintTop_toTopOf="@+id/target_temp_label" />
+
+    <TextView
+        android:id="@+id/status_line_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="@string/status_disconnected"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/timer_text"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:onClick="onTimerClick"
+        android:text="@string/empty_timer"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        app:layout_constraintBottom_toTopOf="@+id/status_line_text"
+        app:layout_constraintStart_toEndOf="@+id/sousvide_button" />
+
+    <Button
+        android:id="@+id/sousvide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:onClick="onTimerClick"
+        android:text="@string/sousvide_button_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+        app:layout_constraintBottom_toTopOf="@+id/status_line_text"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
