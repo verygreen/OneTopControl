@@ -65,4 +65,8 @@
     <string name="empty_timer">00:00</string>
     <string name="status_initializing">Initializing connection...</string>
     <string name="status_errordevice">Unsupported Device</string>
+    <string name="one_top_error_dialog_title">One Top Error!</string>
+    <string name="failure_unknown_code">Unknown failure code: %1$x</string>
+    <string name="failure_no_pot_detected">No pot or induction incompatible pot detected.\nPlace a compatible pot on the One Top.</string>
+    <string name="failure_wired_probe_not_connected">Wired probe not connected.\nPlease plug the thermometer probe completely into the cooktop.</string>
 </resources>

@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -77,6 +76,7 @@ public class OneTopControlActivity extends Activity {
     private BluetoothLeService mBluetoothLeService;
     private AlertDialog mTurnOnDialog = null;
     private AlertDialog mAddFoodDialog = null;
+    private AlertDialog mFailureDialog = null;
 
     private boolean mConnected = false;
     private int mCurrentState = 0;
@@ -89,6 +89,7 @@ public class OneTopControlActivity extends Activity {
     private boolean mListenerStopped = true;
     private boolean mSousVideEnabled = false;
     private boolean mUIEnabled;
+    private int mFailureCode = 0;
     private BluetoothGattCharacteristic mOnetopPowerStateCharacteristic;
     private BluetoothGattCharacteristic mOnetopPowerOutputCharacteristic;
     private BluetoothGattCharacteristic mOnetopTempCharacteristic;
@@ -97,6 +98,7 @@ public class OneTopControlActivity extends Activity {
     private BluetoothGattCharacteristic mOnetopTurnOffCharacteristic;
     private BluetoothGattCharacteristic mOnetopTimerStartCharacteristic;
     private BluetoothGattCharacteristic mOnetopTimerLeftCharacteristic;
+    private BluetoothGattCharacteristic mOnetopFailureCodeCharacteristic;
     private Queue<String> mDebugMessages = new LinkedList<>();
     private CountDownTimer mTimer = null;
 
@@ -232,6 +234,8 @@ public class OneTopControlActivity extends Activity {
                 mSousVideEnabled = true; // In case we lost this bit.
                 updateTimer(toUnsigned(data[0]) * 256 + toUnsigned(data[1]));
             }
+        } else if (UsefulGattAttributes.ONETOP_FAILURE_CODE.equals(uuid)) {
+            handleFailureCode(data[0]);
         }
     }
 
@@ -248,6 +252,62 @@ public class OneTopControlActivity extends Activity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {}
+    }
+
+    private void handleFailureCode(int code)
+    {
+        code &= 0xff;
+
+        if (mFailureCode == 0 && code != 0) { // New error
+            int id = R.string.failure_unknown_code;
+            switch (code) {
+                case 0xf1:
+                    id = R.string.failure_no_pot_detected;
+                    break;
+                case 0xf3:
+                    id = R.string.failure_wired_probe_not_connected;
+                default:
+                    id = R.string.failure_unknown_code;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.one_top_error_dialog_title);
+
+            // Set up the input
+            TextView message = new TextView(this);
+            message.setText(getString(id, code));
+            builder.setView(message);
+
+            // No OK button - wait for the device to be turned on
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    turnOffOneTop();
+                    dialog.cancel();
+
+                    mFailureDialog = null;
+                }
+            });
+
+            if (!mIsVisible)
+                postNotification(getString(id, code), false);
+
+            mFailureDialog = builder.show();
+        } else if (code == 0 && mFailureDialog != null) { // error cleared
+            mFailureDialog.dismiss();
+            mFailureDialog = null;
+        } else if (code != 0 && mFailureDialog != null) { // second error?
+            // Since we already have the dialog in place, don't do anything unless the code is now different
+            if (code != mFailureCode) {
+                mFailureDialog.dismiss();
+                mFailureDialog = null;
+                mFailureCode = 0;
+                handleFailureCode(code);
+                return;
+            }
+        } // remaining code is 0 -> 0 I guess - nothing to be done
+
+        mFailureCode = code;
     }
 
     private void updateCurrentMode(int mode) {
@@ -281,6 +341,11 @@ public class OneTopControlActivity extends Activity {
         if (mTurnOnDialog != null && mCurrentState > 0) {
             mTurnOnDialog.dismiss();
             mTurnOnDialog = null;
+        }
+
+        if (mFailureDialog != null && newState == 0) { // Turn off to clear error?
+            mFailureDialog.dismiss();
+            mFailureDialog = null;
         }
 
         if (mCurrentState > 0) {
@@ -366,7 +431,7 @@ public class OneTopControlActivity extends Activity {
 
                 Log.d(TAG, "Preparing notification");
                 // If we are not visible, do the notification
-                postNotification(status_id, false);
+                postNotification(getResources().getString(status_id), false);
             }
         }
 
@@ -377,7 +442,7 @@ public class OneTopControlActivity extends Activity {
             mBluetoothLeService.readCharacteristic(mOnetopSmartArrayCharacteristic);
     }
 
-    private void postNotification(int message_id, boolean alarm) {
+    private void postNotification(String message, boolean alarm) {
         NotificationCompat.Builder mBuilder;
 
         Intent resultIntent = new Intent(this, OneTopControlActivity.class);
@@ -414,23 +479,23 @@ public class OneTopControlActivity extends Activity {
             }
 
             mBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-            mBuilder.setContentTitle(getResources().getString(message_id))  // required
-                    .setSmallIcon(R.drawable.ic_notification) // required
-                    .setContentText(this.getString(R.string.app_name))  // required
+            mBuilder.setContentTitle(message)  // required
+                    .setSmallIcon(R.drawable.ic_notification)               // required
+                    .setContentText(this.getString(R.string.app_name))      // required
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .setContentIntent(resultPendingIntent)
-                    .setTicker(getResources().getString(message_id));
+                    .setTicker(message);
 
         } else {
             mBuilder = new NotificationCompat.Builder(this);
-            mBuilder.setContentTitle(getResources().getString(message_id))                           // required
-                    .setSmallIcon(R.drawable.ic_notification) // required
-                    .setContentText(this.getString(R.string.app_name))  // required
+            mBuilder.setContentTitle(message)  // required
+                    .setSmallIcon(R.drawable.ic_notification)               // required
+                    .setContentText(this.getString(R.string.app_name))      // required
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .setContentIntent(resultPendingIntent)
-                    .setTicker(getResources().getString(message_id));
+                    .setTicker(message);
         }
 
         try {
@@ -604,7 +669,7 @@ public class OneTopControlActivity extends Activity {
 
                     // Just regular alarm? Issue a notification
                     if (!mSousVideEnabled)
-                        postNotification(R.string.Timer_Is_Up, true);
+                        postNotification(getResources().getString(R.string.Timer_Is_Up), true);
                     cancelAlarm();
                 }
             }.start();
@@ -716,7 +781,7 @@ public class OneTopControlActivity extends Activity {
         builder.setView(message);
 
         // No OK button - wait for the device to be turned on
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 turnOffOneTop();
@@ -1135,6 +1200,12 @@ public class OneTopControlActivity extends Activity {
             if (uuid.equals(UsefulGattAttributes.ONETOP_TIMER_SECONDS_LEFT)) {
                 mOnetopTimerLeftCharacteristic = gattCharacteristic;
                 // Don't read - 60 sec granularity mBluetoothLeService.readCharacteristic(gattCharacteristic);
+                mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
+                Log.d(TAG, "Registered timer listener");
+            }
+            if (uuid.equals(UsefulGattAttributes.ONETOP_FAILURE_CODE)) {
+                mOnetopFailureCodeCharacteristic = gattCharacteristic;
+                mBluetoothLeService.readCharacteristic(gattCharacteristic);
                 mBluetoothLeService.setCharacteristicNotification(gattCharacteristic, true);
                 Log.d(TAG, "Registered timer listener");
             }

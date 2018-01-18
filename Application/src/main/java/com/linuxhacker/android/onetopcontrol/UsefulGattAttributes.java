@@ -36,6 +36,7 @@ public class UsefulGattAttributes {
     public static String ONETOP_UNKNOWN_MODE = "7761b033-5395-47b6-95fb-af45c1f6cd3c"; // 00 in manual, 01 in smart.
     public static String ONETOP_TIMER_SECONDS_LEFT = "a5f358b5-6e40-4bd9-ad46-61979333acc1"; // 2 bytes bigendian
     public static String ONETOP_TIMER_START = "a9a826b9-fb04-4655-b7b6-428aec551df6";
+    public static String ONETOP_FAILURE_CODE = "5bcbf6b1-de80-94b6-0f4b-99fb984707b6";
     static {
         // Sample Services.
         attributes.put("0000180d-0000-1000-8000-00805f9b34fb", "Heart Rate Service");
@@ -55,6 +56,7 @@ public class UsefulGattAttributes {
         attributes.put(ONETOP_TURNOFF_CONTROL, "One Top TurnOff Control"); // write 0xa0b0 to turn off
         attributes.put(ONETOP_TIMER_SECONDS_LEFT, "Seconds left on the timer");
         attributes.put(ONETOP_TIMER_START, "Timer start");
+        attributes.put(ONETOP_FAILURE_CODE, "Failure code");
     }
 
     public static String lookup(String uuid, String defaultName) {
